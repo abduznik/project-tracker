@@ -1,0 +1,155 @@
+{
+  "generated_at": "2026-08-12 17:37:50",
+  "projects": [
+    {
+      "id": 1,
+      "name": "requests",
+      "type": "pypi",
+      "identifier": "requests",
+      "history": [
+        {
+          "collected_at": "2026-08-12 17:37:50",
+          "status": "ok",
+          "downloads": 9100541721,
+          "recent_30d": 1756846159,
+          "stars": 0,
+          "forks": 0
+        }
+      ],
+      "latest": {
+        "collected_at": "2026-08-12 17:37:50",
+        "status": "ok",
+        "downloads": 9100541721,
+        "recent_30d": 1756846159,
+        "stars": 0,
+        "forks": 0
+      },
+      "delta": null
+    },
+    {
+      "id": 2,
+      "name": "yt-dlp",
+      "type": "github",
+      "identifier": "yt-dlp/yt-dlp",
+      "history": [
+        {
+          "collected_at": "2026-08-12 17:37:50",
+          "status": "ok",
+          "downloads": 216375711,
+          "recent_30d": 0,
+          "stars": 184066,
+          "forks": 15856
+        }
+      ],
+      "latest": {
+        "collected_at": "2026-08-12 17:37:50",
+        "status": "ok",
+        "downloads": 216375711,
+        "recent_30d": 0,
+        "stars": 184066,
+        "forks": 15856
+      },
+      "delta": null
+    },
+    {
+      "id": 3,
+      "name": "project-tracker",
+      "type": "github",
+      "identifier": "abduznik/project-tracker",
+      "history": [
+        {
+          "collected_at": "2026-08-12 17:37:50",
+          "status": "ok",
+          "downloads": 0,
+          "recent_30d": 0,
+          "stars": 0,
+          "forks": 0
+        }
+      ],
+      "latest": {
+        "collected_at": "2026-08-12 17:37:50",
+        "status": "ok",
+        "downloads": 0,
+        "recent_30d": 0,
+        "stars": 0,
+        "forks": 0
+      },
+      "delta": null
+    },
+    {
+      "id": 4,
+      "name": "Freegosy",
+      "type": "github",
+      "identifier": "abduznik/Freegosy",
+      "history": [
+        {
+          "collected_at": "2026-08-12 17:37:50",
+          "status": "ok",
+          "downloads": 1082,
+          "recent_30d": 0,
+          "stars": 183,
+          "forks": 9
+        }
+      ],
+      "latest": {
+        "collected_at": "2026-08-12 17:37:50",
+        "status": "ok",
+        "downloads": 1082,
+        "recent_30d": 0,
+        "stars": 183,
+        "forks": 9
+      },
+      "delta": null
+    },
+    {
+      "id": 5,
+      "name": "instrumation",
+      "type": "pypi",
+      "identifier": "instrumation",
+      "history": [
+        {
+          "collected_at": "2026-08-12 17:37:50",
+          "status": "ok",
+          "downloads": 8752,
+          "recent_30d": 423,
+          "stars": 0,
+          "forks": 0
+        }
+      ],
+      "latest": {
+        "collected_at": "2026-08-12 17:37:50",
+        "status": "ok",
+        "downloads": 8752,
+        "recent_30d": 423,
+        "stars": 0,
+        "forks": 0
+      },
+      "delta": null
+    },
+    {
+      "id": 6,
+      "name": "portapkg",
+      "type": "pypi",
+      "identifier": "portapkg",
+      "history": [
+        {
+          "collected_at": "2026-08-12 17:37:50",
+          "status": "ok",
+          "downloads": 1149,
+          "recent_30d": 21,
+          "stars": 0,
+          "forks": 0
+        }
+      ],
+      "latest": {
+        "collected_at": "2026-08-12 17:37:50",
+        "status": "ok",
+        "downloads": 1149,
+        "recent_30d": 21,
+        "stars": 0,
+        "forks": 0
+      },
+      "delta": null
+    }
+  ]
+}

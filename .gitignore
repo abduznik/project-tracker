@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+.env
+
+# Runtime data (DBs are regenerated; seed_projects.json is committed)
+data/*.db
+data/*.db-*
+
+# OS junk
+.DS_Store
+Thumbs.db

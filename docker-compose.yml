@@ -1,0 +1,13 @@
+services:
+  project-tracker:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8095:8095"
+    volumes:
+      - ./data:/data
+    environment:
+      - TZ=UTC
+      - PORT=8095
+      - DATA_DIR=/data
+      - COLLECT_INTERVAL_HOURS=6
