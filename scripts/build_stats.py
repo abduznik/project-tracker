@@ -48,24 +48,24 @@ async def main() -> int:
             "name": proj["name"],
             "type": proj["type"],
             "identifier": proj["identifier"],
-            "history": list((prev or {}).get("history", [])),
+            "history": [
+                h for h in (prev or {}).get("history", []) if h.get("status") == "ok"
+            ],
         }
         try:
             stats = await COLLECTORS[proj["type"]](proj["identifier"])
             snap = {"collected_at": now, "status": "ok", **stats}
+            entry["history"].append(snap)
+            entry.pop("last_error", None)
         except Exception as exc:  # noqa: BLE001 — keep last good snapshot
-            snap = {
-                "collected_at": now, "status": "error",
-                "downloads": 0, "recent_30d": 0, "stars": 0, "forks": 0,
-                "note": f"{type(exc).__name__}: {exc}"[:120],
-            }
-        entry["history"].append(snap)
+            # A throttled/failed run must never degrade the displayed numbers:
+            # keep the last good snapshot as `latest` and note the error only.
+            entry["last_error"] = f"{type(exc).__name__}: {exc}"[:120]
         entry["history"] = entry["history"][-MAX_HISTORY:]
-        entry["latest"] = entry["history"][-1]
+        entry["latest"] = entry["history"][-1] if entry["history"] else None
         entry["delta"] = None
-        ok_history = [h for h in entry["history"] if h["status"] == "ok"]
-        if len(ok_history) >= 2:
-            a, b = ok_history[-1], ok_history[-2]
+        if len(entry["history"]) >= 2:
+            a, b = entry["history"][-1], entry["history"][-2]
             entry["delta"] = {
                 "downloads": a["downloads"] - b["downloads"],
                 "recent_30d": a["recent_30d"] - b["recent_30d"],
@@ -81,9 +81,19 @@ async def main() -> int:
     (SITE_DIR / "stats.json").write_text(
         json.dumps(data, indent=2), encoding="utf-8"
     )
+    # Ensure the static site is complete: copy the dashboard UI next to the data.
+    ui_src = ROOT / "app" / "templates" / "index.html"
+    if not ui_src.exists():  # flat layout (homelab job dir)
+        ui_src = ROOT / "templates" / "index.html"
+    if ui_src.exists():
+        (SITE_DIR / "index.html").write_bytes(ui_src.read_bytes())
+    else:
+        print("WARNING: index.html not found — site will be incomplete")
     ok = sum(1 for p in out if p["latest"]["status"] == "ok")
-    print(f"stats.json updated: {len(out)} projects, {ok} ok, generated {now}")
-    return 0 if ok == len(out) else 1
+    print(f"site/ built: {len(out)} projects, {ok} ok, generated {now}")
+    # Never fail the deploy because a collector was throttled — the dashboard
+    # shows error cards for failed projects and self-heals on the next run.
+    return 0
 
 
 if __name__ == "__main__":

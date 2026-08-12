@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-12 17:37:50",
+  "generated_at": "2026-08-12 17:56:58",
   "projects": [
     {
       "id": 1,
@@ -16,6 +16,7 @@
           "forks": 0
         }
       ],
+      "last_error": "HTTPStatusError: Client error '429 Too Many Requests' for url 'https://pypistats.org/api/packages/requests/recent'\nFor m",
       "latest": {
         "collected_at": "2026-08-12 17:37:50",
         "status": "ok",
@@ -41,6 +42,7 @@
           "forks": 15856
         }
       ],
+      "last_error": "HTTPStatusError: Client error '403 rate limit exceeded' for url 'https://api.github.com/repos/yt-dlp/yt-dlp'\nFor more in",
       "latest": {
         "collected_at": "2026-08-12 17:37:50",
         "status": "ok",
@@ -66,6 +68,7 @@
           "forks": 0
         }
       ],
+      "last_error": "HTTPStatusError: Client error '403 rate limit exceeded' for url 'https://api.github.com/repos/abduznik/project-tracker'\n",
       "latest": {
         "collected_at": "2026-08-12 17:37:50",
         "status": "ok",
@@ -91,6 +94,7 @@
           "forks": 9
         }
       ],
+      "last_error": "HTTPStatusError: Client error '403 rate limit exceeded' for url 'https://api.github.com/repos/abduznik/Freegosy'\nFor mor",
       "latest": {
         "collected_at": "2026-08-12 17:37:50",
         "status": "ok",
@@ -114,17 +118,39 @@
           "recent_30d": 423,
           "stars": 0,
           "forks": 0
+        },
+        {
+          "collected_at": "2026-08-12 17:47:27",
+          "status": "ok",
+          "downloads": 8752,
+          "recent_30d": 423,
+          "stars": 0,
+          "forks": 0
+        },
+        {
+          "collected_at": "2026-08-12 17:54:56",
+          "status": "ok",
+          "downloads": 8752,
+          "recent_30d": 423,
+          "stars": 0,
+          "forks": 0
         }
       ],
+      "last_error": "HTTPStatusError: Client error '429 Too Many Requests' for url 'https://pypistats.org/api/packages/instrumation/recent'\nF",
       "latest": {
-        "collected_at": "2026-08-12 17:37:50",
+        "collected_at": "2026-08-12 17:54:56",
         "status": "ok",
         "downloads": 8752,
         "recent_30d": 423,
         "stars": 0,
         "forks": 0
       },
-      "delta": null
+      "delta": {
+        "downloads": 0,
+        "recent_30d": 0,
+        "stars": 0,
+        "forks": 0
+      }
     },
     {
       "id": 6,
@@ -139,17 +165,38 @@
           "recent_30d": 21,
           "stars": 0,
           "forks": 0
+        },
+        {
+          "collected_at": "2026-08-12 17:46:21",
+          "status": "ok",
+          "downloads": 1149,
+          "recent_30d": 21,
+          "stars": 0,
+          "forks": 0
+        },
+        {
+          "collected_at": "2026-08-12 17:56:58",
+          "status": "ok",
+          "downloads": 1149,
+          "recent_30d": 21,
+          "stars": 0,
+          "forks": 0
         }
       ],
       "latest": {
-        "collected_at": "2026-08-12 17:37:50",
+        "collected_at": "2026-08-12 17:56:58",
         "status": "ok",
         "downloads": 1149,
         "recent_30d": 21,
         "stars": 0,
         "forks": 0
       },
-      "delta": null
+      "delta": {
+        "downloads": 0,
+        "recent_30d": 0,
+        "stars": 0,
+        "forks": 0
+      }
     }
   ]
 }

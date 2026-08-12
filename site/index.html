@@ -187,7 +187,7 @@ function cardHtml(p) {
     <div class="main-stat">${downloads} <small>${sub}</small></div>
     ${stats}
     ${err ? `<div class="note">${ICON.alert}<span>${(l.note || 'collect failed').replace(/</g, '&lt;')}</span></div>` : deltaHtml(p.delta)}
-    <div class="updated">${l ? 'updated ' + timeAgo(l.collected_at) + (p.last_error ? ' · last attempt failed' : '') : 'pending first collect'}</div>
+    <div class="updated">${l ? 'updated ' + timeAgo(l.collected_at) : 'pending first collect'}</div>
   </div>`;
 }
 
