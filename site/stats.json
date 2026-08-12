@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-12 17:47:27",
+  "generated_at": "2026-08-12 17:56:58",
   "projects": [
     {
       "id": 1,
@@ -14,34 +14,16 @@
           "recent_30d": 1756846159,
           "stars": 0,
           "forks": 0
-        },
-        {
-          "collected_at": "2026-08-12 17:46:21",
-          "status": "error",
-          "downloads": 0,
-          "recent_30d": 0,
-          "stars": 0,
-          "forks": 0,
-          "note": "HTTPStatusError: Client error '429 Too Many Requests' for url 'https://pypistats.org/api/packages/requests/recent'\nFor m"
-        },
-        {
-          "collected_at": "2026-08-12 17:47:27",
-          "status": "error",
-          "downloads": 0,
-          "recent_30d": 0,
-          "stars": 0,
-          "forks": 0,
-          "note": "HTTPStatusError: Client error '429 Too Many Requests' for url 'https://pypistats.org/api/packages/requests/recent'\nFor m"
         }
       ],
+      "last_error": "HTTPStatusError: Client error '429 Too Many Requests' for url 'https://pypistats.org/api/packages/requests/recent'\nFor m",
       "latest": {
-        "collected_at": "2026-08-12 17:47:27",
-        "status": "error",
-        "downloads": 0,
-        "recent_30d": 0,
+        "collected_at": "2026-08-12 17:37:50",
+        "status": "ok",
+        "downloads": 9100541721,
+        "recent_30d": 1756846159,
         "stars": 0,
-        "forks": 0,
-        "note": "HTTPStatusError: Client error '429 Too Many Requests' for url 'https://pypistats.org/api/packages/requests/recent'\nFor m"
+        "forks": 0
       },
       "delta": null
     },
@@ -58,34 +40,16 @@
           "recent_30d": 0,
           "stars": 184066,
           "forks": 15856
-        },
-        {
-          "collected_at": "2026-08-12 17:46:21",
-          "status": "error",
-          "downloads": 0,
-          "recent_30d": 0,
-          "stars": 0,
-          "forks": 0,
-          "note": "HTTPStatusError: Client error '403 rate limit exceeded' for url 'https://api.github.com/repos/yt-dlp/yt-dlp'\nFor more in"
-        },
-        {
-          "collected_at": "2026-08-12 17:47:27",
-          "status": "error",
-          "downloads": 0,
-          "recent_30d": 0,
-          "stars": 0,
-          "forks": 0,
-          "note": "HTTPStatusError: Client error '403 rate limit exceeded' for url 'https://api.github.com/repos/yt-dlp/yt-dlp'\nFor more in"
         }
       ],
+      "last_error": "HTTPStatusError: Client error '403 rate limit exceeded' for url 'https://api.github.com/repos/yt-dlp/yt-dlp'\nFor more in",
       "latest": {
-        "collected_at": "2026-08-12 17:47:27",
-        "status": "error",
-        "downloads": 0,
+        "collected_at": "2026-08-12 17:37:50",
+        "status": "ok",
+        "downloads": 216375711,
         "recent_30d": 0,
-        "stars": 0,
-        "forks": 0,
-        "note": "HTTPStatusError: Client error '403 rate limit exceeded' for url 'https://api.github.com/repos/yt-dlp/yt-dlp'\nFor more in"
+        "stars": 184066,
+        "forks": 15856
       },
       "delta": null
     },
@@ -102,34 +66,16 @@
           "recent_30d": 0,
           "stars": 0,
           "forks": 0
-        },
-        {
-          "collected_at": "2026-08-12 17:46:21",
-          "status": "error",
-          "downloads": 0,
-          "recent_30d": 0,
-          "stars": 0,
-          "forks": 0,
-          "note": "HTTPStatusError: Client error '403 rate limit exceeded' for url 'https://api.github.com/repos/abduznik/project-tracker'\n"
-        },
-        {
-          "collected_at": "2026-08-12 17:47:27",
-          "status": "error",
-          "downloads": 0,
-          "recent_30d": 0,
-          "stars": 0,
-          "forks": 0,
-          "note": "HTTPStatusError: Client error '403 rate limit exceeded' for url 'https://api.github.com/repos/abduznik/project-tracker'\n"
         }
       ],
+      "last_error": "HTTPStatusError: Client error '403 rate limit exceeded' for url 'https://api.github.com/repos/abduznik/project-tracker'\n",
       "latest": {
-        "collected_at": "2026-08-12 17:47:27",
-        "status": "error",
+        "collected_at": "2026-08-12 17:37:50",
+        "status": "ok",
         "downloads": 0,
         "recent_30d": 0,
         "stars": 0,
-        "forks": 0,
-        "note": "HTTPStatusError: Client error '403 rate limit exceeded' for url 'https://api.github.com/repos/abduznik/project-tracker'\n"
+        "forks": 0
       },
       "delta": null
     },
@@ -146,34 +92,16 @@
           "recent_30d": 0,
           "stars": 183,
           "forks": 9
-        },
-        {
-          "collected_at": "2026-08-12 17:46:21",
-          "status": "error",
-          "downloads": 0,
-          "recent_30d": 0,
-          "stars": 0,
-          "forks": 0,
-          "note": "HTTPStatusError: Client error '403 rate limit exceeded' for url 'https://api.github.com/repos/abduznik/Freegosy'\nFor mor"
-        },
-        {
-          "collected_at": "2026-08-12 17:47:27",
-          "status": "error",
-          "downloads": 0,
-          "recent_30d": 0,
-          "stars": 0,
-          "forks": 0,
-          "note": "HTTPStatusError: Client error '403 rate limit exceeded' for url 'https://api.github.com/repos/abduznik/Freegosy'\nFor mor"
         }
       ],
+      "last_error": "HTTPStatusError: Client error '403 rate limit exceeded' for url 'https://api.github.com/repos/abduznik/Freegosy'\nFor mor",
       "latest": {
-        "collected_at": "2026-08-12 17:47:27",
-        "status": "error",
-        "downloads": 0,
+        "collected_at": "2026-08-12 17:37:50",
+        "status": "ok",
+        "downloads": 1082,
         "recent_30d": 0,
-        "stars": 0,
-        "forks": 0,
-        "note": "HTTPStatusError: Client error '403 rate limit exceeded' for url 'https://api.github.com/repos/abduznik/Freegosy'\nFor mor"
+        "stars": 183,
+        "forks": 9
       },
       "delta": null
     },
@@ -192,16 +120,15 @@
           "forks": 0
         },
         {
-          "collected_at": "2026-08-12 17:46:21",
-          "status": "error",
-          "downloads": 0,
-          "recent_30d": 0,
+          "collected_at": "2026-08-12 17:47:27",
+          "status": "ok",
+          "downloads": 8752,
+          "recent_30d": 423,
           "stars": 0,
-          "forks": 0,
-          "note": "HTTPStatusError: Client error '429 Too Many Requests' for url 'https://pypistats.org/api/packages/instrumation/recent'\nF"
+          "forks": 0
         },
         {
-          "collected_at": "2026-08-12 17:47:27",
+          "collected_at": "2026-08-12 17:54:56",
           "status": "ok",
           "downloads": 8752,
           "recent_30d": 423,
@@ -209,8 +136,9 @@
           "forks": 0
         }
       ],
+      "last_error": "HTTPStatusError: Client error '429 Too Many Requests' for url 'https://pypistats.org/api/packages/instrumation/recent'\nF",
       "latest": {
-        "collected_at": "2026-08-12 17:47:27",
+        "collected_at": "2026-08-12 17:54:56",
         "status": "ok",
         "downloads": 8752,
         "recent_30d": 423,
@@ -247,23 +175,21 @@
           "forks": 0
         },
         {
-          "collected_at": "2026-08-12 17:47:27",
-          "status": "error",
-          "downloads": 0,
-          "recent_30d": 0,
+          "collected_at": "2026-08-12 17:56:58",
+          "status": "ok",
+          "downloads": 1149,
+          "recent_30d": 21,
           "stars": 0,
-          "forks": 0,
-          "note": "HTTPStatusError: Client error '429 Too Many Requests' for url 'https://pypistats.org/api/packages/portapkg/recent'\nFor m"
+          "forks": 0
         }
       ],
       "latest": {
-        "collected_at": "2026-08-12 17:47:27",
-        "status": "error",
-        "downloads": 0,
-        "recent_30d": 0,
+        "collected_at": "2026-08-12 17:56:58",
+        "status": "ok",
+        "downloads": 1149,
+        "recent_30d": 21,
         "stars": 0,
-        "forks": 0,
-        "note": "HTTPStatusError: Client error '429 Too Many Requests' for url 'https://pypistats.org/api/packages/portapkg/recent'\nFor m"
+        "forks": 0
       },
       "delta": {
         "downloads": 0,

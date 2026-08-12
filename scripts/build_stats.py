@@ -48,24 +48,24 @@ async def main() -> int:
             "name": proj["name"],
             "type": proj["type"],
             "identifier": proj["identifier"],
-            "history": list((prev or {}).get("history", [])),
+            "history": [
+                h for h in (prev or {}).get("history", []) if h.get("status") == "ok"
+            ],
         }
         try:
             stats = await COLLECTORS[proj["type"]](proj["identifier"])
             snap = {"collected_at": now, "status": "ok", **stats}
+            entry["history"].append(snap)
+            entry.pop("last_error", None)
         except Exception as exc:  # noqa: BLE001 — keep last good snapshot
-            snap = {
-                "collected_at": now, "status": "error",
-                "downloads": 0, "recent_30d": 0, "stars": 0, "forks": 0,
-                "note": f"{type(exc).__name__}: {exc}"[:120],
-            }
-        entry["history"].append(snap)
+            # A throttled/failed run must never degrade the displayed numbers:
+            # keep the last good snapshot as `latest` and note the error only.
+            entry["last_error"] = f"{type(exc).__name__}: {exc}"[:120]
         entry["history"] = entry["history"][-MAX_HISTORY:]
-        entry["latest"] = entry["history"][-1]
+        entry["latest"] = entry["history"][-1] if entry["history"] else None
         entry["delta"] = None
-        ok_history = [h for h in entry["history"] if h["status"] == "ok"]
-        if len(ok_history) >= 2:
-            a, b = ok_history[-1], ok_history[-2]
+        if len(entry["history"]) >= 2:
+            a, b = entry["history"][-1], entry["history"][-2]
             entry["delta"] = {
                 "downloads": a["downloads"] - b["downloads"],
                 "recent_30d": a["recent_30d"] - b["recent_30d"],
