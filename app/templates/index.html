@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Download Tracker</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: #1a1d27;
+    --card-border: #262b3a;
+    --text: #e6e8ef;
+    --muted: #8b91a7;
+    --accent: #6c8cff;
+    --green: #34d399;
+    --red: #f87171;
+    --pypi: #3775a9;
+    --gh: #8b949e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+  }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 28px 20px 60px; }
+  header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 22px; }
+  header h1 { font-size: 22px; font-weight: 700; letter-spacing: 0.3px; }
+  header h1 span { color: var(--accent); }
+  .sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  .toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  button, select, input {
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color .15s;
+  }
+  button:hover { border-color: var(--accent); }
+  button:disabled { opacity: .5; cursor: wait; }
+  input:focus, select:focus { outline: none; border-color: var(--accent); }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+  .btn-danger { color: var(--red); }
+  .btn-danger:hover { border-color: var(--red); }
+  .add-form { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .add-form input { width: 150px; }
+  .add-form input.wide { width: 230px; }
+  #status { color: var(--muted); font-size: 12px; margin-left: 4px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    position: relative;
+    transition: border-color .15s, transform .1s;
+  }
+  .card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .card.error { border-color: var(--red); }
+  .card-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .badge {
+    font-size: 10px; font-weight: 700; letter-spacing: .8px;
+    padding: 3px 8px; border-radius: 20px; text-transform: uppercase;
+  }
+  .badge.pypi { background: rgba(55,117,169,.2); color: #5aa7e0; }
+  .badge.github { background: rgba(139,148,158,.2); color: var(--gh); }
+  .card h3 { font-size: 16px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .del { position: absolute; top: 10px; right: 10px; padding: 4px 8px; font-size: 11px; }
+  .main-stat { font-size: 30px; font-weight: 700; margin: 4px 0 2px; }
+  .main-stat small { font-size: 13px; color: var(--muted); font-weight: 500; }
+  .stats-row { display: flex; gap: 18px; margin-top: 10px; font-size: 12px; color: var(--muted); }
+  .stats-row b { color: var(--text); font-weight: 600; }
+  .delta { font-size: 12px; margin-top: 8px; }
+  .delta.up { color: var(--green); }
+  .delta.down { color: var(--red); }
+  .updated { color: var(--muted); font-size: 11px; margin-top: 8px; }
+  .note { color: var(--red); font-size: 11px; margin-top: 6px; word-break: break-word; }
+  #chart-section { margin-top: 26px; display: none; }
+  #chart-section h2 { font-size: 16px; margin-bottom: 10px; }
+  #chart-section h2 small { color: var(--muted); font-weight: 400; }
+  .chart-box { background: var(--card); border: 1px solid var(--card-border); border-radius: 12px; padding: 16px; }
+  .empty { text-align: center; color: var(--muted); padding: 60px 0; font-size: 14px; }
+  @media (max-width: 640px) { .add-form input, .add-form input.wide { width: 100%; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>📦 Project <span>Download</span> Tracker</h1>
+      <div class="sub">PyPI &amp; GitHub download stats · collected every 6h</div>
+    </div>
+    <div class="toolbar">
+      <div class="add-form">
+        <input id="f-name" placeholder="Name" title="Display name">
+        <select id="f-type">
+          <option value="pypi">PyPI</option>
+          <option value="github">GitHub</option>
+        </select>
+        <input id="f-id" class="wide" placeholder="pkg name | owner/repo" title="PyPI package name or GitHub owner/repo">
+        <button class="btn-primary" onclick="addProject()">+ Add</button>
+      </div>
+      <button onclick="refreshNow()" id="btn-refresh">⟳ Refresh now</button>
+      <span id="status"></span>
+    </div>
+  </header>
+
+  <div id="grid" class="grid"><div class="empty">Loading…</div></div>
+
+  <section id="chart-section">
+    <h2 id="chart-title">History</h2>
+    <div class="chart-box"><canvas id="chart" height="120"></canvas></div>
+  </section>
+</div>
+
+<script>
+let chart = null;
+const fmt = n => n >= 1e9 ? (n/1e9).toFixed(2)+'B' : n >= 1e6 ? (n/1e6).toFixed(2)+'M' : n >= 1e3 ? (n/1e3).toFixed(1)+'K' : String(n);
+const fmtFull = n => n.toLocaleString('en-US');
+const timeAgo = iso => {
+  if (!iso) return '';
+  const s = (Date.now() - new Date(iso.replace(' ', 'T') + 'Z')) / 1000;
+  if (s < 90) return 'just now';
+  if (s < 3600) return Math.round(s/60) + 'm ago';
+  if (s < 86400) return Math.round(s/3600) + 'h ago';
+  return Math.round(s/86400) + 'd ago';
+};
+
+function setStatus(msg) { document.getElementById('status').textContent = msg || ''; }
+
+function badge(type) {
+  return `<span class="badge ${type}">${type}</span>`;
+}
+
+function deltaHtml(d) {
+  if (!d) return '<div class="updated">— first snapshot —</div>';
+  const parts = [];
+  if (d.downloads) parts.push(`downloads ${d.downloads > 0 ? '▲' : '▼'} ${fmt(Math.abs(d.downloads))}`);
+  if (d.stars) parts.push(`stars ${d.stars > 0 ? '▲' : '▼'} ${Math.abs(d.stars)}`);
+  if (d.forks) parts.push(`forks ${d.forks > 0 ? '▲' : '▼'} ${Math.abs(d.forks)}`);
+  if (!parts.length) return '<div class="updated">no change</div>';
+  const cls = (d.downloads >= 0 && d.stars >= 0) ? 'up' : 'down';
+  return `<div class="delta ${cls}">${parts.join(' · ')}</div>`;
+}
+
+function cardHtml(p) {
+  const l = p.latest;
+  const isPy = p.type === 'pypi';
+  const err = l && l.status === 'error';
+  let stats = '';
+  if (isPy) {
+    stats = `<div class="stats-row"><span>30d <b>${l ? fmtFull(l.recent_30d) : '—'}</b></span></div>`;
+  } else {
+    stats = `<div class="stats-row"><span>Stars <b>${l ? fmtFull(l.stars) : '—'}</b></span><span>Forks <b>${l ? fmtFull(l.forks) : '—'}</b></span></div>`;
+  }
+  const downloads = l && l.status === 'ok' ? fmtFull(l.downloads) : '—';
+  const sub = isPy ? 'all-time downloads' : 'release downloads';
+  return `<div class="card ${err ? 'error' : ''}" data-id="${p.id}" onclick="showChart(${p.id}, '${p.name.replace(/'/g, "\\'")}')">
+    <button class="del btn-danger" onclick="event.stopPropagation(); delProject(${p.id})">✕</button>
+    <div class="card-head">${badge(p.type)}<h3>${p.name}</h3></div>
+    <div class="main-stat">${downloads} <small>${sub}</small></div>
+    ${stats}
+    ${err ? `<div class="note">⚠ ${l.note || 'collect failed'}</div>` : deltaHtml(p.delta)}
+    <div class="updated">${l ? 'updated ' + timeAgo(l.collected_at) : 'pending first collect'}</div>
+  </div>`;
+}
+
+async function load() {
+  try {
+    const res = await fetch('/api/projects');
+    const data = await res.json();
+    const grid = document.getElementById('grid');
+    if (!data.length) {
+      grid.innerHTML = '<div class="empty">No projects yet — add one above 👆</div>';
+    } else {
+      grid.innerHTML = data.map(cardHtml).join('');
+    }
+  } catch (e) {
+    document.getElementById('grid').innerHTML = '<div class="empty">Failed to load — is the service up?</div>';
+  }
+}
+
+async function addProject() {
+  const name = document.getElementById('f-name').value.trim();
+  const type = document.getElementById('f-type').value;
+  const id = document.getElementById('f-id').value.trim();
+  if (!name || !id) { setStatus('⚠ name and identifier required'); return; }
+  const res = await fetch('/api/projects', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, type, identifier: id })
+  });
+  if (!res.ok) { setStatus('⚠ ' + (await res.json()).detail || 'add failed'); return; }
+  document.getElementById('f-name').value = '';
+  document.getElementById('f-id').value = '';
+  setStatus('added — first snapshot collecting…');
+  load();
+}
+
+async function delProject(id) {
+  if (!confirm('Remove this project and its history?')) return;
+  await fetch('/api/projects/' + id, { method: 'DELETE' });
+  if (chart) { chart.destroy(); chart = null; document.getElementById('chart-section').style.display = 'none'; }
+  load();
+}
+
+async function refreshNow() {
+  const btn = document.getElementById('btn-refresh');
+  btn.disabled = true;
+  setStatus('refreshing…');
+  await fetch('/api/refresh', { method: 'POST' });
+  // collection runs async on the server; poll until a fresh snapshot lands
+  const t0 = Date.now();
+  const poll = setInterval(async () => {
+    try {
+      const res = await fetch('/api/projects');
+      const data = await res.json();
+      const fresh = data.every(p => p.latest && (Date.now() - new Date(p.latest.collected_at.replace(' ', 'T') + 'Z')) < 120000);
+      if (fresh || Date.now() - t0 > 90000) {
+        clearInterval(poll);
+        btn.disabled = false;
+        setStatus('done');
+        load();
+      }
+    } catch (e) { /* keep polling */ }
+  }, 3000);
+}
+
+async function showChart(id, name) {
+  const res = await fetch('/api/history/' + id);
+  const hist = await res.json();
+  const ok = hist.filter(h => h.status === 'ok');
+  document.getElementById('chart-section').style.display = 'block';
+  document.getElementById('chart-title').innerHTML = `${name} — history <small>(${ok.length} snapshots)</small>`;
+  const labels = ok.map(h => h.collected_at.slice(0, 16));
+  const datasets = [{ label: 'downloads', data: ok.map(h => h.downloads), borderColor: '#6c8cff', backgroundColor: 'rgba(108,140,255,.15)', fill: true, tension: .3 }];
+  if (ok.some(h => h.recent_30d)) {
+    datasets.push({ label: 'last 30d', data: ok.map(h => h.recent_30d), borderColor: '#34d399', backgroundColor: 'transparent', tension: .3 });
+  }
+  if (ok.some(h => h.stars)) {
+    datasets.push({ label: 'stars', data: ok.map(h => h.stars), borderColor: '#fbbf24', backgroundColor: 'transparent', tension: .3 });
+  }
+  if (chart) chart.destroy();
+  chart = new Chart(document.getElementById('chart'), {
+    type: 'line',
+    data: { labels, datasets },
+    options: {
+      responsive: true,
+      interaction: { mode: 'index', intersect: false },
+      plugins: { legend: { labels: { color: '#e6e8ef' } } },
+      scales: {
+        x: { ticks: { color: '#8b91a7', maxTicksLimit: 10 }, grid: { color: '#262b3a' } },
+        y: { ticks: { color: '#8b91a7' }, grid: { color: '#262b3a' } }
+      }
+    }
+  });
+}
+
+load();
+setInterval(load, 300000); // auto-refresh every 5 min
+</script>
+</body>
+</html>

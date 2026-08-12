@@ -1,0 +1,4 @@
+[
+  {"name": "requests", "type": "pypi", "identifier": "requests"},
+  {"name": "yt-dlp", "type": "github", "identifier": "yt-dlp/yt-dlp"}
+]
