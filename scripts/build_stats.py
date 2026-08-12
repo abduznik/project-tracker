@@ -81,9 +81,19 @@ async def main() -> int:
     (SITE_DIR / "stats.json").write_text(
         json.dumps(data, indent=2), encoding="utf-8"
     )
+    # Ensure the static site is complete: copy the dashboard UI next to the data.
+    ui_src = ROOT / "app" / "templates" / "index.html"
+    if not ui_src.exists():  # flat layout (homelab job dir)
+        ui_src = ROOT / "templates" / "index.html"
+    if ui_src.exists():
+        (SITE_DIR / "index.html").write_bytes(ui_src.read_bytes())
+    else:
+        print("WARNING: index.html not found — site will be incomplete")
     ok = sum(1 for p in out if p["latest"]["status"] == "ok")
-    print(f"stats.json updated: {len(out)} projects, {ok} ok, generated {now}")
-    return 0 if ok == len(out) else 1
+    print(f"site/ built: {len(out)} projects, {ok} ok, generated {now}")
+    # Never fail the deploy because a collector was throttled — the dashboard
+    # shows error cards for failed projects and self-heals on the next run.
+    return 0
 
 
 if __name__ == "__main__":
