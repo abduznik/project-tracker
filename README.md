@@ -6,6 +6,10 @@ Built with FastAPI + SQLite + Chart.js. No API keys required, no external servic
 
 ![Dashboard](docs/screenshot.png)
 
+## Live Demo
+
+See it running with real data — [abduznik.github.io/project-tracker](https://abduznik.github.io/project-tracker/). The demo is the same dashboard served as a static site; a GitHub Actions workflow refreshes the numbers twice a day.
+
 ## Features
 
 - 📦 **PyPI tracking** — all-time downloads and last-30-days for any package (via [pypistats.org](https://pypistats.org))

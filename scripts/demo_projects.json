@@ -1,0 +1,8 @@
+[
+  {"name": "requests", "type": "pypi", "identifier": "requests"},
+  {"name": "yt-dlp", "type": "github", "identifier": "yt-dlp/yt-dlp"},
+  {"name": "project-tracker", "type": "github", "identifier": "abduznik/project-tracker"},
+  {"name": "Freegosy", "type": "github", "identifier": "abduznik/Freegosy"},
+  {"name": "instrumation", "type": "pypi", "identifier": "instrumation"},
+  {"name": "portapkg", "type": "pypi", "identifier": "portapkg"}
+]

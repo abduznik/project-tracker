@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Project Download Tracker</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236c8cff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='20' x2='18' y2='10'/%3E%3Cline x1='12' y1='20' x2='12' y2='4'/%3E%3Cline x1='6' y1='20' x2='6' y2='14'/%3E%3C/svg%3E">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
   :root {
@@ -27,6 +28,8 @@
   }
   .wrap { max-width: 1280px; margin: 0 auto; padding: 28px 20px 60px; }
   header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 22px; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand svg { flex-shrink: 0; }
   header h1 { font-size: 22px; font-weight: 700; letter-spacing: 0.3px; }
   header h1 span { color: var(--accent); }
   .sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
@@ -45,6 +48,7 @@
   button:hover { border-color: var(--accent); }
   button:disabled { opacity: .5; cursor: wait; }
   input:focus, select:focus { outline: none; border-color: var(--accent); }
+  .btn { display: inline-flex; align-items: center; gap: 6px; }
   .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
   .btn-danger { color: var(--red); }
   .btn-danger:hover { border-color: var(--red); }
@@ -52,6 +56,7 @@
   .add-form input { width: 150px; }
   .add-form input.wide { width: 230px; }
   #status { color: var(--muted); font-size: 12px; margin-left: 4px; }
+  .hidden { display: none !important; }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
   .card {
     background: var(--card);
@@ -72,16 +77,16 @@
   .badge.pypi { background: rgba(55,117,169,.2); color: #5aa7e0; }
   .badge.github { background: rgba(139,148,158,.2); color: var(--gh); }
   .card h3 { font-size: 16px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .del { position: absolute; top: 10px; right: 10px; padding: 4px 8px; font-size: 11px; }
+  .del { position: absolute; top: 10px; right: 10px; padding: 4px 6px; font-size: 11px; }
   .main-stat { font-size: 30px; font-weight: 700; margin: 4px 0 2px; }
   .main-stat small { font-size: 13px; color: var(--muted); font-weight: 500; }
   .stats-row { display: flex; gap: 18px; margin-top: 10px; font-size: 12px; color: var(--muted); }
   .stats-row b { color: var(--text); font-weight: 600; }
-  .delta { font-size: 12px; margin-top: 8px; }
+  .delta { font-size: 12px; margin-top: 8px; display: flex; align-items: center; gap: 4px; }
   .delta.up { color: var(--green); }
   .delta.down { color: var(--red); }
   .updated { color: var(--muted); font-size: 11px; margin-top: 8px; }
-  .note { color: var(--red); font-size: 11px; margin-top: 6px; word-break: break-word; }
+  .note { color: var(--red); font-size: 11px; margin-top: 6px; word-break: break-word; display: flex; align-items: flex-start; gap: 5px; }
   #chart-section { margin-top: 26px; display: none; }
   #chart-section h2 { font-size: 16px; margin-bottom: 10px; }
   #chart-section h2 small { color: var(--muted); font-weight: 400; }
@@ -93,21 +98,27 @@
 <body>
 <div class="wrap">
   <header>
-    <div>
-      <h1>📦 Project <span>Download</span> Tracker</h1>
-      <div class="sub">PyPI &amp; GitHub download stats · collected every 6h</div>
+    <div class="brand">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6c8cff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      <div>
+        <h1>Project <span>Download</span> Tracker</h1>
+        <div class="sub">PyPI &amp; GitHub download stats · collected every 6h</div>
+      </div>
     </div>
     <div class="toolbar">
-      <div class="add-form">
+      <div class="add-form" id="live-tools">
         <input id="f-name" placeholder="Name" title="Display name">
         <select id="f-type">
           <option value="pypi">PyPI</option>
           <option value="github">GitHub</option>
         </select>
         <input id="f-id" class="wide" placeholder="pkg name | owner/repo" title="PyPI package name or GitHub owner/repo">
-        <button class="btn-primary" onclick="addProject()">+ Add</button>
+        <button class="btn btn-primary" onclick="addProject()">+ Add</button>
       </div>
-      <button onclick="refreshNow()" id="btn-refresh">⟳ Refresh now</button>
+      <button class="btn" onclick="refreshNow()" id="btn-refresh">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        Refresh now
+      </button>
       <span id="status"></span>
     </div>
   </header>
@@ -121,12 +132,20 @@
 </div>
 
 <script>
+const ICON = {
+  x: '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+  alert: '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+  up: '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>',
+  down: '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>'
+};
 let chart = null;
+let mode = 'live'; // 'live' (FastAPI backend) or 'static' (GitHub Pages stats.json)
+let projects = [];
 const fmt = n => n >= 1e9 ? (n/1e9).toFixed(2)+'B' : n >= 1e6 ? (n/1e6).toFixed(2)+'M' : n >= 1e3 ? (n/1e3).toFixed(1)+'K' : String(n);
 const fmtFull = n => n.toLocaleString('en-US');
 const timeAgo = iso => {
   if (!iso) return '';
-  const s = (Date.now() - new Date(iso.replace(' ', 'T') + 'Z')) / 1000;
+  const s = (Date.now() - new Date(iso.replace(' ', 'T') + (iso.length === 19 ? 'Z' : ''))) / 1000;
   if (s < 90) return 'just now';
   if (s < 3600) return Math.round(s/60) + 'm ago';
   if (s < 86400) return Math.round(s/3600) + 'h ago';
@@ -134,20 +153,17 @@ const timeAgo = iso => {
 };
 
 function setStatus(msg) { document.getElementById('status').textContent = msg || ''; }
-
-function badge(type) {
-  return `<span class="badge ${type}">${type}</span>`;
-}
+function badge(type) { return `<span class="badge ${type}">${type}</span>`; }
 
 function deltaHtml(d) {
   if (!d) return '<div class="updated">— first snapshot —</div>';
   const parts = [];
-  if (d.downloads) parts.push(`downloads ${d.downloads > 0 ? '▲' : '▼'} ${fmt(Math.abs(d.downloads))}`);
-  if (d.stars) parts.push(`stars ${d.stars > 0 ? '▲' : '▼'} ${Math.abs(d.stars)}`);
-  if (d.forks) parts.push(`forks ${d.forks > 0 ? '▲' : '▼'} ${Math.abs(d.forks)}`);
+  if (d.downloads) parts.push(`${ICON[d.downloads > 0 ? 'up' : 'down']} downloads ${fmt(Math.abs(d.downloads))}`);
+  if (d.stars) parts.push(`${ICON[d.stars > 0 ? 'up' : 'down']} stars ${Math.abs(d.stars)}`);
+  if (d.forks) parts.push(`${ICON[d.forks > 0 ? 'up' : 'down']} forks ${Math.abs(d.forks)}`);
   if (!parts.length) return '<div class="updated">no change</div>';
   const cls = (d.downloads >= 0 && d.stars >= 0) ? 'up' : 'down';
-  return `<div class="delta ${cls}">${parts.join(' · ')}</div>`;
+  return `<div class="delta ${cls}">${parts.join('<span style="opacity:.4;margin:0 4px">·</span>')}</div>`;
 }
 
 function cardHtml(p) {
@@ -162,28 +178,46 @@ function cardHtml(p) {
   }
   const downloads = l && l.status === 'ok' ? fmtFull(l.downloads) : '—';
   const sub = isPy ? 'all-time downloads' : 'release downloads';
-  return `<div class="card ${err ? 'error' : ''}" data-id="${p.id}" onclick="showChart(${p.id}, '${p.name.replace(/'/g, "\\'")}')">
-    <button class="del btn-danger" onclick="event.stopPropagation(); delProject(${p.id})">✕</button>
+  const delBtn = mode === 'live'
+    ? `<button class="del btn-danger btn" onclick="event.stopPropagation(); delProject(${p.id})">${ICON.x}</button>`
+    : '';
+  return `<div class="card ${err ? 'error' : ''}" data-id="${p.id}" onclick="showChart(${p.id})">
+    ${delBtn}
     <div class="card-head">${badge(p.type)}<h3>${p.name}</h3></div>
     <div class="main-stat">${downloads} <small>${sub}</small></div>
     ${stats}
-    ${err ? `<div class="note">⚠ ${l.note || 'collect failed'}</div>` : deltaHtml(p.delta)}
+    ${err ? `<div class="note">${ICON.alert}<span>${(l.note || 'collect failed').replace(/</g, '&lt;')}</span></div>` : deltaHtml(p.delta)}
     <div class="updated">${l ? 'updated ' + timeAgo(l.collected_at) : 'pending first collect'}</div>
   </div>`;
 }
 
 async function load() {
+  let list = null;
+  // 1) try the live backend
   try {
-    const res = await fetch('/api/projects');
-    const data = await res.json();
-    const grid = document.getElementById('grid');
-    if (!data.length) {
-      grid.innerHTML = '<div class="empty">No projects yet — add one above 👆</div>';
-    } else {
-      grid.innerHTML = data.map(cardHtml).join('');
-    }
-  } catch (e) {
-    document.getElementById('grid').innerHTML = '<div class="empty">Failed to load — is the service up?</div>';
+    const res = await fetch('/api/projects', { headers: { 'Accept': 'application/json' } });
+    if (res.ok) { list = await res.json(); mode = 'live'; }
+  } catch (e) { /* fall through */ }
+  // 2) fall back to the static demo payload
+  if (!list) {
+    try {
+      const res = await fetch('./stats.json');
+      if (res.ok) { const d = await res.json(); list = d.projects; mode = 'static'; }
+    } catch (e) { /* fall through */ }
+  }
+  if (!list) {
+    document.getElementById('grid').innerHTML = '<div class="empty">No data source available.</div>';
+    return;
+  }
+  projects = list;
+  const live = mode === 'live';
+  document.getElementById('live-tools').classList.toggle('hidden', !live);
+  document.getElementById('btn-refresh').classList.toggle('hidden', !live);
+  const grid = document.getElementById('grid');
+  if (!projects.length) {
+    grid.innerHTML = '<div class="empty">No projects yet — add one above.</div>';
+  } else {
+    grid.innerHTML = projects.map(cardHtml).join('');
   }
 }
 
@@ -191,13 +225,13 @@ async function addProject() {
   const name = document.getElementById('f-name').value.trim();
   const type = document.getElementById('f-type').value;
   const id = document.getElementById('f-id').value.trim();
-  if (!name || !id) { setStatus('⚠ name and identifier required'); return; }
+  if (!name || !id) { setStatus('name and identifier required'); return; }
   const res = await fetch('/api/projects', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ name, type, identifier: id })
   });
-  if (!res.ok) { setStatus('⚠ ' + (await res.json()).detail || 'add failed'); return; }
+  if (!res.ok) { setStatus((await res.json()).detail || 'add failed'); return; }
   document.getElementById('f-name').value = '';
   document.getElementById('f-id').value = '';
   setStatus('added — first snapshot collecting…');
@@ -216,13 +250,12 @@ async function refreshNow() {
   btn.disabled = true;
   setStatus('refreshing…');
   await fetch('/api/refresh', { method: 'POST' });
-  // collection runs async on the server; poll until a fresh snapshot lands
   const t0 = Date.now();
   const poll = setInterval(async () => {
     try {
       const res = await fetch('/api/projects');
       const data = await res.json();
-      const fresh = data.every(p => p.latest && (Date.now() - new Date(p.latest.collected_at.replace(' ', 'T') + 'Z')) < 120000);
+      const fresh = data.length > 0 && data.every(p => p.latest && (Date.now() - new Date(p.latest.collected_at.replace(' ', 'T') + 'Z')) < 120000);
       if (fresh || Date.now() - t0 > 90000) {
         clearInterval(poll);
         btn.disabled = false;
@@ -233,19 +266,25 @@ async function refreshNow() {
   }, 3000);
 }
 
-async function showChart(id, name) {
-  const res = await fetch('/api/history/' + id);
-  const hist = await res.json();
-  const ok = hist.filter(h => h.status === 'ok');
-  document.getElementById('chart-section').style.display = 'block';
-  document.getElementById('chart-title').innerHTML = `${name} — history <small>(${ok.length} snapshots)</small>`;
-  const labels = ok.map(h => h.collected_at.slice(0, 16));
-  const datasets = [{ label: 'downloads', data: ok.map(h => h.downloads), borderColor: '#6c8cff', backgroundColor: 'rgba(108,140,255,.15)', fill: true, tension: .3 }];
-  if (ok.some(h => h.recent_30d)) {
-    datasets.push({ label: 'last 30d', data: ok.map(h => h.recent_30d), borderColor: '#34d399', backgroundColor: 'transparent', tension: .3 });
+async function showChart(id) {
+  const p = projects.find(x => x.id === id);
+  if (!p) return;
+  let hist;
+  if (mode === 'live') {
+    const res = await fetch('/api/history/' + id);
+    hist = await res.json();
+  } else {
+    hist = (p.history || []).filter(h => h.status === 'ok');
   }
-  if (ok.some(h => h.stars)) {
-    datasets.push({ label: 'stars', data: ok.map(h => h.stars), borderColor: '#fbbf24', backgroundColor: 'transparent', tension: .3 });
+  document.getElementById('chart-section').style.display = 'block';
+  document.getElementById('chart-title').innerHTML = `${p.name} — history <small>(${hist.length} snapshots)</small>`;
+  const labels = hist.map(h => String(h.collected_at).slice(0, 16));
+  const datasets = [{ label: 'downloads', data: hist.map(h => h.downloads), borderColor: '#6c8cff', backgroundColor: 'rgba(108,140,255,.15)', fill: true, tension: .3 }];
+  if (hist.some(h => h.recent_30d)) {
+    datasets.push({ label: 'last 30d', data: hist.map(h => h.recent_30d), borderColor: '#34d399', backgroundColor: 'transparent', tension: .3 });
+  }
+  if (hist.some(h => h.stars)) {
+    datasets.push({ label: 'stars', data: hist.map(h => h.stars), borderColor: '#fbbf24', backgroundColor: 'transparent', tension: .3 });
   }
   if (chart) chart.destroy();
   chart = new Chart(document.getElementById('chart'), {
